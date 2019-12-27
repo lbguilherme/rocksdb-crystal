@@ -1,6 +1,6 @@
 require "spec"
 require "file_utils"
-require "../src/*"
+require "../src/rocksdb"
 
 describe RocksDb do
   it "works with a simple database" do

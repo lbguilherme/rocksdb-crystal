@@ -1,3 +1,5 @@
+require "./librocksdb"
+
 private def err_check
   err = Pointer(UInt8).null
   result = yield pointerof(err)
