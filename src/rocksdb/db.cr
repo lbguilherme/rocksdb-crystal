@@ -7,6 +7,7 @@ lib LibRocksDb
   fun close = rocksdb_close(db : Db*) : Void
   fun get = rocksdb_get(db : Db*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
   fun put = rocksdb_put(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**) : Void
+  fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
 end
 
 module RocksDb
@@ -51,6 +52,13 @@ module RocksDb
       raise ClosedDatabaseError.new if @value.null?
       RocksDb.err_check do |err|
         LibRocksDb.put(self, write_options, key, key.size, value, value.size, err)
+      end
+    end
+
+    def delete(key : Bytes, write_options : WriteOptions = @default_write_options)
+      raise ClosedDatabaseError.new if @value.null?
+      RocksDb.err_check do |err|
+        LibRocksDb.delete(self, write_options, key, key.size, err)
       end
     end
 

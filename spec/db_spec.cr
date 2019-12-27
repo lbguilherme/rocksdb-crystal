@@ -11,6 +11,8 @@ describe RocksDb do
     db.get(Bytes[1, 2, 0, 3]).should eq nil
     db.put(Bytes[1, 2, 0, 3], Bytes[0, 1, 0])
     db.get(Bytes[1, 2, 0, 3]).should eq Bytes[0, 1, 0]
+    db.delete(Bytes[1, 2, 0, 3])
+    db.get(Bytes[1, 2, 0, 3]).should eq nil
     db.close
     FileUtils.rm_rf path
   end
