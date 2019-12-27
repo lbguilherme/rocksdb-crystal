@@ -1,0 +1,10 @@
+name: rocksdb
+version: 0.1.0
+
+authors:
+  - Guilherme Bernal <guilherme@cubos.io>
+
+description: |
+  Bindings for RocksDB
+
+license: MIT
