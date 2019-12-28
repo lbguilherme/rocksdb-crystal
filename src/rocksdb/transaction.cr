@@ -3,7 +3,6 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  fun optimistictransaction_begin = rocksdb_optimistictransaction_begin(optimistic_transaction_db : OptimisticTransactionDb*, write_options : WriteOptions*, otxn_options : OptimisticTransactionOptions*, old_txn : Transaction*) : Transaction*
   fun transaction_commit = rocksdb_transaction_commit(txn : Transaction*, errptr : UInt8**)
   fun transaction_rollback = rocksdb_transaction_rollback(txn : Transaction*, errptr : UInt8**)
   fun transaction_set_savepoint = rocksdb_transaction_set_savepoint(txn : Transaction*)

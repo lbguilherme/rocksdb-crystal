@@ -17,6 +17,8 @@ lib LibRocksDB
   fun optimistictransaction_options_create = rocksdb_optimistictransaction_options_create : OptimisticTransactionOptions*
   fun optimistictransaction_options_destroy = rocksdb_optimistictransaction_options_destroy(optimistic_transaction_options : OptimisticTransactionOptions*) : Void
   fun optimistictransaction_options_set_set_snapshot = rocksdb_optimistictransaction_options_set_set_snapshot(optimistic_transaction_options : OptimisticTransactionOptions*, value : UInt8) : Void
+
+  fun optimistictransaction_begin = rocksdb_optimistictransaction_begin(optimistic_transaction_db : OptimisticTransactionDb*, write_options : WriteOptions*, otxn_options : OptimisticTransactionOptions*, old_txn : Transaction*) : Transaction*
 end
 
 module RocksDB
