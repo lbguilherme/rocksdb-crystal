@@ -24,7 +24,7 @@ lib LibRocksDB
   fun writeoptions_create = rocksdb_writeoptions_create : WriteOptions*
   fun writeoptions_destroy = rocksdb_writeoptions_destroy(write_options : WriteOptions*) : Void
   fun writeoptions_set_sync = rocksdb_writeoptions_set_sync(write_options : WriteOptions*, value : UInt8) : Void
-  fun writeoptions_disable_WAL = rocksdb_writeoptions_disable_WAL(write_options : WriteOptions*, value : Int) : Void
+  fun writeoptions_disable_WAL = rocksdb_writeoptions_disable_WAL(write_options : WriteOptions*, value : LibC::Int) : Void
   fun writeoptions_set_ignore_missing_column_families = rocksdb_writeoptions_set_ignore_missing_column_families(write_options : WriteOptions*, value : UInt8) : Void
   fun writeoptions_set_no_slowdown = rocksdb_writeoptions_set_no_slowdown(write_options : WriteOptions*, value : UInt8) : Void
   fun writeoptions_set_low_pri = rocksdb_writeoptions_set_low_pri(write_options : WriteOptions*, value : UInt8) : Void
