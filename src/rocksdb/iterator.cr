@@ -1,4 +1,4 @@
-lib LibRocksDb
+lib LibRocksDB
   struct Iterator
     dummy : UInt8
   end
@@ -17,9 +17,9 @@ lib LibRocksDb
   fun iter_get_error = rocksdb_iter_get_error(iter : Iterator*, errptr : UInt8**) : Void
 end
 
-module RocksDb
+module RocksDB
   class Iterator
-    def initialize(@value : LibRocksDb::Iterator*)
+    def initialize(@value : LibRocksDB::Iterator*)
     end
 
     def to_unsafe
@@ -27,56 +27,56 @@ module RocksDb
     end
 
     def finalize
-      LibRocksDb.iter_destroy(self)
+      LibRocksDB.iter_destroy(self)
     end
 
     def valid?
-      result = LibRocksDb.iter_valid(self) != 0
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      result = LibRocksDB.iter_valid(self) != 0
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
       result
     end
 
     def seek_to_first
-      LibRocksDb.iter_seek_to_first(self)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_seek_to_first(self)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def seek_to_last
-      LibRocksDb.iter_seek_to_last(self)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_seek_to_last(self)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def seek(key : Bytes)
-      LibRocksDb.iter_seek(self, key, key.size)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_seek(self, key, key.size)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def seek_for_prev(key : Bytes)
-      LibRocksDb.iter_seek_for_prev(self, key, key.size)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_seek_for_prev(self, key, key.size)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def next
-      LibRocksDb.iter_next(self)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_next(self)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def prev
-      LibRocksDb.iter_prev(self)
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      LibRocksDB.iter_prev(self)
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
     end
 
     def key
       len = LibC::SizeT.new(0)
-      ptr = LibRocksDb.iter_key(self, pointerof(len))
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      ptr = LibRocksDB.iter_key(self, pointerof(len))
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
       Bytes.new(ptr, len)
     end
 
     def value
       len = LibC::SizeT.new(0)
-      ptr = LibRocksDb.iter_value(self, pointerof(len))
-      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      ptr = LibRocksDB.iter_value(self, pointerof(len))
+      RocksDB.err_check { |err| LibRocksDB.iter_get_error(self, err) }
       Bytes.new(ptr, len)
     end
   end

@@ -1,4 +1,4 @@
-lib LibRocksDb
+lib LibRocksDB
   struct Db
     dummy : UInt8
   end
@@ -10,12 +10,12 @@ lib LibRocksDb
   fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
 end
 
-module RocksDb
+module RocksDB
   class ClosedDatabaseError < Error
   end
 
   class Database
-    def initialize(@value : LibRocksDb::Db*)
+    def initialize(@value : LibRocksDB::Db*)
       @default_read_options = ReadOptions.new
       @default_write_options = WriteOptions.new
     end
@@ -29,42 +29,42 @@ module RocksDb
     end
 
     def close
-      LibRocksDb.close(self)
-      @value = Pointer(LibRocksDb::Db).null
+      LibRocksDB.close(self)
+      @value = Pointer(LibRocksDB::Db).null
     end
 
     def self.open(path : String, options : Options)
-      new(RocksDb.err_check do |err|
-        LibRocksDb.open(options, path, err)
+      new(RocksDB.err_check do |err|
+        LibRocksDB.open(options, path, err)
       end)
     end
 
     def get(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
       raise ClosedDatabaseError.new if @value.null?
       len = uninitialized LibC::SizeT
-      ptr = RocksDb.err_check do |err|
-        LibRocksDb.get(self, read_options, key, key.size, pointerof(len), err)
+      ptr = RocksDB.err_check do |err|
+        LibRocksDB.get(self, read_options, key, key.size, pointerof(len), err)
       end
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
 
     def put(key : Bytes, value : Bytes, write_options : WriteOptions = @default_write_options)
       raise ClosedDatabaseError.new if @value.null?
-      RocksDb.err_check do |err|
-        LibRocksDb.put(self, write_options, key, key.size, value, value.size, err)
+      RocksDB.err_check do |err|
+        LibRocksDB.put(self, write_options, key, key.size, value, value.size, err)
       end
     end
 
     def delete(key : Bytes, write_options : WriteOptions = @default_write_options)
       raise ClosedDatabaseError.new if @value.null?
-      RocksDb.err_check do |err|
-        LibRocksDb.delete(self, write_options, key, key.size, err)
+      RocksDB.err_check do |err|
+        LibRocksDB.delete(self, write_options, key, key.size, err)
       end
     end
 
     def iterator(read_options : ReadOptions = @default_read_options)
       raise ClosedDatabaseError.new if @value.null?
-      Iterator.new(LibRocksDb.create_iterator(self, read_options))
+      Iterator.new(LibRocksDB.create_iterator(self, read_options))
     end
   end
 end

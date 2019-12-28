@@ -1,6 +1,6 @@
 require "./transaction"
 
-lib LibRocksDb
+lib LibRocksDB
   struct OptimisticTransactionDb
     dummy : UInt8
   end
@@ -19,31 +19,31 @@ lib LibRocksDb
   fun optimistictransaction_options_set_set_snapshot = rocksdb_optimistictransaction_options_set_set_snapshot(optimistic_transaction_options : OptimisticTransactionOptions*, value : UInt8) : Void
 end
 
-module RocksDb
+module RocksDB
   class OptimisticTransactionDatabase < Database
     def self.open(path : String, options : Options) : OptimisticTransactionDatabase
-      optimistic_transaction_db = RocksDb.err_check do |err|
-        LibRocksDb.optimistictransactiondb_open(options, path, err)
+      optimistic_transaction_db = RocksDB.err_check do |err|
+        LibRocksDB.optimistictransactiondb_open(options, path, err)
       end
-      new(LibRocksDb.optimistictransactiondb_get_base_db(optimistic_transaction_db), optimistic_transaction_db)
+      new(LibRocksDB.optimistictransactiondb_get_base_db(optimistic_transaction_db), optimistic_transaction_db)
     end
 
-    def initialize(value, @optimistic_transaction_db : LibRocksDb::OptimisticTransactionDb*)
+    def initialize(value, @optimistic_transaction_db : LibRocksDB::OptimisticTransactionDb*)
       super(value)
       @default_optimistic_transaction_options = OptimisticTransactionOptions.new
     end
 
     def close
-      LibRocksDb.optimistictransactiondb_close_base_db(@value)
-      LibRocksDb.optimistictransactiondb_close(@optimistic_transaction_db)
-      @value = Pointer(LibRocksDb::Db).null
-      @optimistic_transaction_db = Pointer(LibRocksDb::OptimisticTransactionDb).null
+      LibRocksDB.optimistictransactiondb_close_base_db(@value)
+      LibRocksDB.optimistictransactiondb_close(@optimistic_transaction_db)
+      @value = Pointer(LibRocksDB::Db).null
+      @optimistic_transaction_db = Pointer(LibRocksDB::OptimisticTransactionDb).null
     end
 
     def begin_transaction(write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
       raise ClosedDatabaseError.new if @value.null?
       OptimisticTransaction.new(
-        LibRocksDb.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, nil),
+        LibRocksDB.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, nil),
         @default_read_options,
         @default_write_options,
         @default_optimistic_transaction_options,
@@ -53,7 +53,7 @@ module RocksDb
 
     def begin_transaction(old : OptimisticTransaction, write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
       raise ClosedDatabaseError.new if @value.null?
-      LibRocksDb.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, old)
+      LibRocksDB.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, old)
     end
   end
 
@@ -72,7 +72,7 @@ module RocksDb
 
   class OptimisticTransactionOptions
     def initialize
-      @value = LibRocksDb.optimistictransaction_options_create
+      @value = LibRocksDB.optimistictransaction_options_create
     end
 
     def to_unsafe
@@ -80,11 +80,11 @@ module RocksDb
     end
 
     def finalize
-      LibRocksDb.optimistictransaction_options_destroy(self)
+      LibRocksDB.optimistictransaction_options_destroy(self)
     end
 
     def set_snapshot=(value : Bool)
-      LibRocksDb.optimistictransaction_options_set_set_snapshot(self, value ? 1 : 0)
+      LibRocksDB.optimistictransaction_options_set_set_snapshot(self, value ? 1 : 0)
     end
   end
 end

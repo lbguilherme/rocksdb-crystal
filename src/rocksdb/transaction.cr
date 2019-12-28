@@ -1,4 +1,4 @@
-lib LibRocksDb
+lib LibRocksDB
   struct Transaction
     dummy : UInt8
   end
@@ -15,9 +15,9 @@ lib LibRocksDb
   fun transaction_delete = rocksdb_transaction_delete(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**) : Void
 end
 
-module RocksDb
+module RocksDB
   class Transaction
-    @value : LibRocksDb::Transaction*
+    @value : LibRocksDB::Transaction*
     @default_read_options : ReadOptions
     @default_write_options : WriteOptions
 
@@ -25,55 +25,55 @@ module RocksDb
       @value
     end
 
-    def initialize(@value : LibRocksDb::Transaction*, @default_read_options : ReadOptions, @default_write_options : WriteOptions)
+    def initialize(@value : LibRocksDB::Transaction*, @default_read_options : ReadOptions, @default_write_options : WriteOptions)
     end
 
     def finalize
-      LibRocksDb.transaction_destroy(self)
+      LibRocksDB.transaction_destroy(self)
     end
 
     def commit
-      RocksDb.err_check { |err| LibRocksDb.transaction_commit(self, err) }
+      RocksDB.err_check { |err| LibRocksDB.transaction_commit(self, err) }
     end
 
     def rollback
-      RocksDb.err_check { |err| LibRocksDb.transaction_rollback(self, err) }
+      RocksDB.err_check { |err| LibRocksDB.transaction_rollback(self, err) }
     end
 
     def set_savepoint
-      LibRocksDb.rocksdb_transaction_set_savepoint(self)
+      LibRocksDB.rocksdb_transaction_set_savepoint(self)
     end
 
     def rollback_to_savepoint
-      RocksDb.err_check { |err| LibRocksDb.transaction_rollback_to_savepoint(self, err) }
+      RocksDB.err_check { |err| LibRocksDB.transaction_rollback_to_savepoint(self, err) }
     end
 
     def get(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
       len = uninitialized LibC::SizeT
-      ptr = RocksDb.err_check do |err|
-        LibRocksDb.transaction_get(self, read_options, key, key.size, pointerof(len), err)
+      ptr = RocksDB.err_check do |err|
+        LibRocksDB.transaction_get(self, read_options, key, key.size, pointerof(len), err)
       end
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
 
     def get_for_update(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
       len = uninitialized LibC::SizeT
-      ptr = RocksDb.err_check do |err|
-        LibRocksDb.transaction_get_for_update(self, read_options, key, key.size, pointerof(len), 1, err)
+      ptr = RocksDB.err_check do |err|
+        LibRocksDB.transaction_get_for_update(self, read_options, key, key.size, pointerof(len), 1, err)
       end
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
 
     def put(key : Bytes, value : Bytes)
-      RocksDb.err_check do |err|
-        LibRocksDb.transaction_put(self, key, key.size, value, value.size, err)
+      RocksDB.err_check do |err|
+        LibRocksDB.transaction_put(self, key, key.size, value, value.size, err)
       end
       nil
     end
 
     def delete(key : Bytes, value : Bytes)
-      RocksDb.err_check do |err|
-        LibRocksDb.transaction_delete(self, key, key.size, err)
+      RocksDB.err_check do |err|
+        LibRocksDB.transaction_delete(self, key, key.size, err)
       end
       nil
     end

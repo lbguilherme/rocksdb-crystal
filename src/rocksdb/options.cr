@@ -1,4 +1,4 @@
-lib LibRocksDb
+lib LibRocksDB
   struct Options
     dummy : UInt8
   end
@@ -25,10 +25,10 @@ lib LibRocksDb
   fun writeoptions_destroy = rocksdb_writeoptions_destroy(write_options : WriteOptions*) : Void
 end
 
-module RocksDb
+module RocksDB
   class Options
     def initialize
-      @value = LibRocksDb.options_create
+      @value = LibRocksDB.options_create
     end
 
     def to_unsafe
@@ -36,21 +36,21 @@ module RocksDb
     end
 
     def finalize
-      LibRocksDb.options_destroy(self)
+      LibRocksDB.options_destroy(self)
     end
 
     def create_if_missing=(value : Bool)
-      LibRocksDb.options_set_create_if_missing(self, value ? 1 : 0)
+      LibRocksDB.options_set_create_if_missing(self, value ? 1 : 0)
     end
 
     def paranoid_checks=(value : Bool)
-      LibRocksDb.options_set_paranoid_checks(self, value ? 1 : 0)
+      LibRocksDB.options_set_paranoid_checks(self, value ? 1 : 0)
     end
   end
 
   class ReadOptions
     def initialize
-      @value = LibRocksDb.readoptions_create
+      @value = LibRocksDB.readoptions_create
     end
 
     def to_unsafe
@@ -58,21 +58,21 @@ module RocksDb
     end
 
     def finalize
-      LibRocksDb.readoptions_destroy(self)
+      LibRocksDB.readoptions_destroy(self)
     end
 
     def iterate_upper_bound=(key : Bytes)
-      LibRocksDb.readoptions_set_iterate_upper_bound(self, key, key.size)
+      LibRocksDB.readoptions_set_iterate_upper_bound(self, key, key.size)
     end
 
     def iterate_lower_bound=(key : Bytes)
-      LibRocksDb.readoptions_set_iterate_lower_bound(self, key, key.size)
+      LibRocksDB.readoptions_set_iterate_lower_bound(self, key, key.size)
     end
   end
 
   class WriteOptions
     def initialize
-      @value = LibRocksDb.writeoptions_create
+      @value = LibRocksDB.writeoptions_create
     end
 
     def to_unsafe
@@ -80,7 +80,7 @@ module RocksDb
     end
 
     def finalize
-      LibRocksDb.writeoptions_destroy(self)
+      LibRocksDB.writeoptions_destroy(self)
     end
   end
 end
