@@ -32,51 +32,51 @@ module RocksDb
 
     def valid?
       result = LibRocksDb.iter_valid(self) != 0
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
       result
     end
 
     def seek_to_first
       LibRocksDb.iter_seek_to_first(self)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def seek_to_last
       LibRocksDb.iter_seek_to_last(self)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def seek(key : Bytes)
       LibRocksDb.iter_seek(self, key, key.size)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def seek_for_prev(key : Bytes)
       LibRocksDb.iter_seek_for_prev(self, key, key.size)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def next
       LibRocksDb.iter_next(self)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def prev
       LibRocksDb.iter_prev(self)
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
     end
 
     def key
       len = LibC::SizeT.new(0)
       ptr = LibRocksDb.iter_key(self, pointerof(len))
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
       Bytes.new(ptr, len)
     end
 
     def value
       len = LibC::SizeT.new(0)
       ptr = LibRocksDb.iter_value(self, pointerof(len))
-      err_check { |err| LibRocksDb.iter_get_error(self, err) }
+      RocksDb.err_check { |err| LibRocksDb.iter_get_error(self, err) }
       Bytes.new(ptr, len)
     end
   end
