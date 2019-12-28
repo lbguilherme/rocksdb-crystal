@@ -41,7 +41,7 @@ module RocksDb
     end
 
     def begin_transaction(write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
-      raise ClosedDatabase.new if @value.null?
+      raise ClosedDatabaseError.new if @value.null?
       OptimisticTransaction.new(
         LibRocksDb.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, nil),
         @default_read_options,
@@ -52,7 +52,7 @@ module RocksDb
     end
 
     def begin_transaction(old : OptimisticTransaction, write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
-      raise ClosedDatabase.new if @value.null?
+      raise ClosedDatabaseError.new if @value.null?
       LibRocksDb.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, old)
     end
   end
