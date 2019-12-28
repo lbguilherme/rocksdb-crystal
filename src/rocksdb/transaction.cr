@@ -71,7 +71,7 @@ module RocksDB
       nil
     end
 
-    def delete(key : Bytes, value : Bytes)
+    def delete(key : Bytes)
       RocksDB.err_check do |err|
         LibRocksDB.transaction_delete(self, key, key.size, err)
       end
