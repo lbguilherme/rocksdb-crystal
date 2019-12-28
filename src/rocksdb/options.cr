@@ -23,6 +23,12 @@ lib LibRocksDB
 
   fun writeoptions_create = rocksdb_writeoptions_create : WriteOptions*
   fun writeoptions_destroy = rocksdb_writeoptions_destroy(write_options : WriteOptions*) : Void
+  fun writeoptions_set_sync = rocksdb_writeoptions_set_sync(write_options : WriteOptions*, value : UInt8) : Void
+  fun writeoptions_disable_WAL = rocksdb_writeoptions_disable_WAL(write_options : WriteOptions*, value : Int) : Void
+  fun writeoptions_set_ignore_missing_column_families = rocksdb_writeoptions_set_ignore_missing_column_families(write_options : WriteOptions*, value : UInt8) : Void
+  fun writeoptions_set_no_slowdown = rocksdb_writeoptions_set_no_slowdown(write_options : WriteOptions*, value : UInt8) : Void
+  fun writeoptions_set_low_pri = rocksdb_writeoptions_set_low_pri(write_options : WriteOptions*, value : UInt8) : Void
+  fun writeoptions_set_memtable_insert_hint_per_batch = rocksdb_writeoptions_set_memtable_insert_hint_per_batch(write_options : WriteOptions*, value : UInt8) : Void
 end
 
 module RocksDB
@@ -81,6 +87,30 @@ module RocksDB
 
     def finalize
       LibRocksDB.writeoptions_destroy(self)
+    end
+
+    def sync=(value : Bool)
+      LibRocksDB.writeoptions_set_sync(self, value ? 1 : 0)
+    end
+
+    def disable_wal=(value : Bool)
+      LibRocksDB.writeoptions_disable_WAL(self, value ? 1 : 0)
+    end
+
+    def ignore_missing_column_families=(value : Bool)
+      LibRocksDB.writeoptions_set_ignore_missing_column_families(self, value ? 1 : 0)
+    end
+
+    def no_slowdown=(value : Bool)
+      LibRocksDB.writeoptions_set_no_slowdown(self, value ? 1 : 0)
+    end
+
+    def low_priority=(value : Bool)
+      LibRocksDB.writeoptions_set_low_pri(self, value ? 1 : 0)
+    end
+
+    def writeoptions_set_memtable_insert_hint_per_batch=(value : Bool)
+      LibRocksDB.writeoptions_set_memtable_insert_hint_per_batch(self, value ? 1 : 0)
     end
   end
 end
