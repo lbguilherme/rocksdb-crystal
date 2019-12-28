@@ -51,7 +51,7 @@ module RocksDb
     def get(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
       len = uninitialized LibC::SizeT
       ptr = RocksDb.err_check do |err|
-        LibRocksDb.transaction_get(self, read_options, key, key.size, pointerof(len), 1, err)
+        LibRocksDb.transaction_get(self, read_options, key, key.size, pointerof(len), err)
       end
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
