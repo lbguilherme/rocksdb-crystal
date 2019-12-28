@@ -4,10 +4,11 @@ lib LibRocksDB
   end
 
   fun open = rocksdb_open(options : Options*, name : UInt8*, errptr : UInt8**) : Db*
-  fun close = rocksdb_close(db : Db*) : Void
+  fun close = rocksdb_close(db : Db*)
   fun get = rocksdb_get(db : Db*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
-  fun put = rocksdb_put(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**) : Void
+  fun put = rocksdb_put(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
   fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
+  fun write = rocksdb_write(db : Db*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
 end
 
 module RocksDB
@@ -59,6 +60,13 @@ module RocksDB
       raise ClosedDatabaseError.new if @value.null?
       RocksDB.err_check do |err|
         LibRocksDB.delete(self, write_options, key, key.size, err)
+      end
+    end
+
+    def write(batch : WriteBatch, write_options : WriteOptions = @default_write_options)
+      raise ClosedDatabaseError.new if @value.null?
+      RocksDB.err_check do |err|
+        LibRocksDB.write(self, write_options, batch, err)
       end
     end
 

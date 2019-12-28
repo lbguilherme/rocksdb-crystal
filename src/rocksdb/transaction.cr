@@ -10,8 +10,9 @@ lib LibRocksDB
   fun transaction_destroy = rocksdb_transaction_destroy(txn : Transaction*)
   fun transaction_get = rocksdb_transaction_get(txn : Transaction*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
   fun transaction_get_for_update = rocksdb_transaction_get_for_update(txn : Transaction*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, exclusive : UInt8, errptr : UInt8**) : UInt8*
-  fun transaction_put = rocksdb_transaction_put(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**) : Void
-  fun transaction_delete = rocksdb_transaction_delete(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**) : Void
+  fun transaction_put = rocksdb_transaction_put(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
+  fun transaction_delete = rocksdb_transaction_delete(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
+  fun transaction_write = rocksdb_transaction_write(txn : Transaction*, batch : WriteBatch*, errptr : UInt8**)
 end
 
 module RocksDB
@@ -67,14 +68,18 @@ module RocksDB
       RocksDB.err_check do |err|
         LibRocksDB.transaction_put(self, key, key.size, value, value.size, err)
       end
-      nil
     end
 
     def delete(key : Bytes)
       RocksDB.err_check do |err|
         LibRocksDB.transaction_delete(self, key, key.size, err)
       end
-      nil
+    end
+
+    def write(batch : WriteBatch)
+      RocksDB.err_check do |err|
+        LibRocksDB.transaction_write(self, batch, err)
+      end
     end
   end
 end

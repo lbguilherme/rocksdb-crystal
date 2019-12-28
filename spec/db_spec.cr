@@ -16,4 +16,25 @@ describe RocksDB do
     db.close
     FileUtils.rm_rf path
   end
+
+  it "writes with batch" do
+    path = "tmp_#{Random::Secure.hex}"
+    options = RocksDB::Options.new
+    options.create_if_missing = true
+    db = RocksDB::Database.open(path, options)
+    db.get(Bytes[1, 2, 0, 3]).should eq nil
+    batch = RocksDB::WriteBatch.new
+    batch.put(Bytes[1, 2, 0, 3], Bytes[0, 1, 0])
+    batch.put(Bytes[2], Bytes[2])
+    batch.put(Bytes[3], Bytes[3])
+    batch.delete(Bytes[2])
+    batch.count.should eq 4
+    db.get(Bytes[1, 2, 0, 3]).should eq nil
+    db.write(batch)
+    db.get(Bytes[1, 2, 0, 3]).should eq Bytes[0, 1, 0]
+    db.get(Bytes[2]).should eq nil
+    db.get(Bytes[3]).should eq Bytes[3]
+    db.close
+    FileUtils.rm_rf path
+  end
 end

@@ -4,16 +4,16 @@ lib LibRocksDB
   end
 
   fun options_create = rocksdb_options_create : Options*
-  fun options_destroy = rocksdb_options_destroy(options : Options*) : Void
-  fun options_set_create_if_missing = rocksdb_options_set_create_if_missing(options : Options*, value : UInt8) : Void
-  fun options_set_paranoid_checks = rocksdb_options_set_paranoid_checks(options : Options*, value : UInt8) : Void
+  fun options_destroy = rocksdb_options_destroy(options : Options*)
+  fun options_set_create_if_missing = rocksdb_options_set_create_if_missing(options : Options*, value : UInt8)
+  fun options_set_paranoid_checks = rocksdb_options_set_paranoid_checks(options : Options*, value : UInt8)
 
   struct ReadOptions
     dummy : UInt8
   end
 
   fun readoptions_create = rocksdb_readoptions_create : ReadOptions*
-  fun readoptions_destroy = rocksdb_readoptions_destroy(read_options : ReadOptions*) : Void
+  fun readoptions_destroy = rocksdb_readoptions_destroy(read_options : ReadOptions*)
   fun readoptions_set_iterate_upper_bound = rocksdb_readoptions_set_iterate_upper_bound(read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT)
   fun readoptions_set_iterate_lower_bound = rocksdb_readoptions_set_iterate_lower_bound(read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT)
 
@@ -22,13 +22,13 @@ lib LibRocksDB
   end
 
   fun writeoptions_create = rocksdb_writeoptions_create : WriteOptions*
-  fun writeoptions_destroy = rocksdb_writeoptions_destroy(write_options : WriteOptions*) : Void
-  fun writeoptions_set_sync = rocksdb_writeoptions_set_sync(write_options : WriteOptions*, value : UInt8) : Void
-  fun writeoptions_disable_WAL = rocksdb_writeoptions_disable_WAL(write_options : WriteOptions*, value : LibC::Int) : Void
-  fun writeoptions_set_ignore_missing_column_families = rocksdb_writeoptions_set_ignore_missing_column_families(write_options : WriteOptions*, value : UInt8) : Void
-  fun writeoptions_set_no_slowdown = rocksdb_writeoptions_set_no_slowdown(write_options : WriteOptions*, value : UInt8) : Void
-  fun writeoptions_set_low_pri = rocksdb_writeoptions_set_low_pri(write_options : WriteOptions*, value : UInt8) : Void
-  fun writeoptions_set_memtable_insert_hint_per_batch = rocksdb_writeoptions_set_memtable_insert_hint_per_batch(write_options : WriteOptions*, value : UInt8) : Void
+  fun writeoptions_destroy = rocksdb_writeoptions_destroy(write_options : WriteOptions*)
+  fun writeoptions_set_sync = rocksdb_writeoptions_set_sync(write_options : WriteOptions*, value : UInt8)
+  fun writeoptions_disable_WAL = rocksdb_writeoptions_disable_WAL(write_options : WriteOptions*, value : LibC::Int)
+  fun writeoptions_set_ignore_missing_column_families = rocksdb_writeoptions_set_ignore_missing_column_families(write_options : WriteOptions*, value : UInt8)
+  fun writeoptions_set_no_slowdown = rocksdb_writeoptions_set_no_slowdown(write_options : WriteOptions*, value : UInt8)
+  fun writeoptions_set_low_pri = rocksdb_writeoptions_set_low_pri(write_options : WriteOptions*, value : UInt8)
+  fun writeoptions_set_memtable_insert_hint_per_batch = rocksdb_writeoptions_set_memtable_insert_hint_per_batch(write_options : WriteOptions*, value : UInt8)
 end
 
 module RocksDB

@@ -1,6 +1,6 @@
 @[Link("rocksdb")]
 lib LibRocksDB
-  fun free = rocksdb_free(ptr : Void*) : Void
+  fun free = rocksdb_free(ptr : Void*)
 end
 
 module RocksDB
