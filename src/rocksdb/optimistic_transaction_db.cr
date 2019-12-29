@@ -59,7 +59,7 @@ module RocksDB
     end
   end
 
-  class OptimisticTransaction < Transaction
+  class OptimisticTransaction < BaseTransaction
     @default_optimistic_transaction_options : OptimisticTransactionOptions
     @optimistic_transaction_db : OptimisticTransactionDatabase
 

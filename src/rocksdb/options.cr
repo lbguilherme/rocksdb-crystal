@@ -7,6 +7,9 @@ lib LibRocksDB
   fun options_destroy = rocksdb_options_destroy(options : Options*)
   fun options_set_create_if_missing = rocksdb_options_set_create_if_missing(options : Options*, value : UInt8)
   fun options_set_paranoid_checks = rocksdb_options_set_paranoid_checks(options : Options*, value : UInt8)
+  fun options_set_enable_pipelined_write = rocksdb_options_set_enable_pipelined_write(options : Options*, value : UInt8)
+  fun options_increase_parallelism = rocksdb_options_increase_parallelism(options : Options*, value : LibC::Int)
+  fun options_set_max_background_jobs = rocksdb_options_set_max_background_jobs(options : Options*, value : LibC::Int)
 
   struct ReadOptions
     dummy : UInt8
@@ -51,6 +54,18 @@ module RocksDB
 
     def paranoid_checks=(value : Bool)
       LibRocksDB.options_set_paranoid_checks(self, value ? 1 : 0)
+    end
+
+    def enable_pipelined_write=(value : Bool)
+      LibRocksDB.options_set_enable_pipelined_write(self, value ? 1 : 0)
+    end
+
+    def increase_parallelism(total_threads : Int = 16)
+      LibRocksDB.options_increase_parallelism(self, total_threads)
+    end
+
+    def max_background_jobs=(value : Int)
+      LibRocksDB.options_set_max_background_jobs(self, value)
     end
   end
 

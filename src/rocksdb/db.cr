@@ -9,6 +9,7 @@ lib LibRocksDB
   fun put = rocksdb_put(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
   fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
   fun write = rocksdb_write(db : Db*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
+  fun create_iterator = rocksdb_create_iterator(db : Db*, read_options : ReadOptions*) : Iterator*
 end
 
 module RocksDB
@@ -30,7 +31,7 @@ module RocksDB
     end
 
     def close
-      LibRocksDB.close(self)
+      LibRocksDB.close(@value)
       @value = Pointer(LibRocksDB::Db).null
     end
 

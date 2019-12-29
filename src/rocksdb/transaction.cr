@@ -16,7 +16,7 @@ lib LibRocksDB
 end
 
 module RocksDB
-  class Transaction
+  abstract class BaseTransaction
     @value : LibRocksDB::Transaction*
     @default_read_options : ReadOptions
     @default_write_options : WriteOptions

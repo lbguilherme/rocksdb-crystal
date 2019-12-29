@@ -3,7 +3,6 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  fun create_iterator = rocksdb_create_iterator(db : Db*, read_options : ReadOptions*) : Iterator*
   fun iter_destroy = rocksdb_iter_destroy(iter : Iterator*)
   fun iter_valid = rocksdb_iter_valid(iter : Iterator*) : UInt8
   fun iter_seek_to_first = rocksdb_iter_seek_to_first(iter : Iterator*)

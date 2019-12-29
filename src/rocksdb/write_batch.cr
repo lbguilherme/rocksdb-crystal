@@ -3,7 +3,7 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  fun writebatch_create = rocksdb_writebatch_create() : WriteBatch*
+  fun writebatch_create = rocksdb_writebatch_create : WriteBatch*
   fun writebatch_destroy = rocksdb_writebatch_destroy(batch : WriteBatch*)
   fun writebatch_clear = rocksdb_writebatch_clear(batch : WriteBatch*)
   fun writebatch_count = rocksdb_writebatch_count(batch : WriteBatch*) : LibC::Int
