@@ -41,7 +41,7 @@ lib LibRocksDB
 end
 
 module RocksDB
-  class TransactionDatabase < Database
+  class TransactionDatabase
     def self.open(path : String, options : Options, txn_options : TransactionDatabaseOptions = TransactionDatabaseOptions.new) : TransactionDatabase
       transaction_db = RocksDB.err_check do |err|
         LibRocksDB.transactiondb_open(options, txn_options, path, err)
@@ -50,27 +50,28 @@ module RocksDB
     end
 
     def to_unsafe
-      @transaction_db
+      @value
     end
 
-    def initialize(@transaction_db : LibRocksDB::TransactionDb*)
-      super(Pointer(LibRocksDB::Db).null)
+    def initialize(@value : LibRocksDB::TransactionDb*)
+      @default_read_options = ReadOptions.new
+      @default_write_options = WriteOptions.new
       @default_transaction_options = TransactionOptions.new
     end
 
     def finalize
-      close unless @transaction_db.null?
+      close unless @value.null?
     end
 
     def close
-      LibRocksDB.transactiondb_close(@transaction_db)
-      @transaction_db = Pointer(LibRocksDB::TransactionDb).null
+      LibRocksDB.transactiondb_close(self)
+      @value = Pointer(LibRocksDB::TransactionDb).null
     end
 
     def begin_transaction(write_options : WriteOptions = @default_write_options, transaction_options : TransactionOptions = @default_transaction_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       Transaction.new(
-        LibRocksDB.transaction_begin(@transaction_db, write_options, transaction_options, nil),
+        LibRocksDB.transaction_begin(self, write_options, transaction_options, nil),
         @default_read_options,
         @default_write_options,
         @default_transaction_options,
@@ -79,12 +80,12 @@ module RocksDB
     end
 
     def begin_transaction(old : Transaction, write_options : WriteOptions = @default_write_options, transaction_options : TransactionOptions = @default_transaction_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
-      LibRocksDB.transaction_begin(@transaction_db, write_options, transaction_options, old)
+      raise ClosedDatabaseError.new if @value.null?
+      LibRocksDB.transaction_begin(self, write_options, transaction_options, old)
     end
 
     def get(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       len = uninitialized LibC::SizeT
       ptr = RocksDB.err_check do |err|
         LibRocksDB.transactiondb_get(self, read_options, key, key.size, pointerof(len), err)
@@ -93,28 +94,28 @@ module RocksDB
     end
 
     def put(key : Bytes, value : Bytes, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       RocksDB.err_check do |err|
         LibRocksDB.transactiondb_put(self, write_options, key, key.size, value, value.size, err)
       end
     end
 
     def delete(key : Bytes, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       RocksDB.err_check do |err|
         LibRocksDB.transactiondb_delete(self, write_options, key, key.size, err)
       end
     end
 
     def write(batch : WriteBatch, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       RocksDB.err_check do |err|
         LibRocksDB.transactiondb_write(self, write_options, batch, err)
       end
     end
 
     def iterator(read_options : ReadOptions = @default_read_options)
-      raise ClosedDatabaseError.new if @transaction_db.null?
+      raise ClosedDatabaseError.new if @value.null?
       Iterator.new(LibRocksDB.transactiondb_create_iterator(self, read_options))
     end
   end
