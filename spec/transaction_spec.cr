@@ -7,8 +7,7 @@ describe RocksDB do
     path = "tmp_#{Random::Secure.hex}"
     options = RocksDB::Options.new
     options.create_if_missing = true
-    txn_options = RocksDB::TransactionDbOptions.new
-    db = RocksDB::TransactionDatabase.open(path, options, txn_options)
+    db = RocksDB::TransactionDatabase.open(path, options)
     db.get(Bytes[1, 2, 0, 3]).should eq nil
     db.put(Bytes[1, 2, 0, 3], Bytes[0, 1, 0])
     db.get(Bytes[1, 2, 0, 3]).should eq Bytes[0, 1, 0]
@@ -22,8 +21,7 @@ describe RocksDB do
     path = "tmp_#{Random::Secure.hex}"
     options = RocksDB::Options.new
     options.create_if_missing = true
-    txn_options = RocksDB::TransactionDbOptions.new
-    db = RocksDB::TransactionDatabase.open(path, options, txn_options)
+    db = RocksDB::TransactionDatabase.open(path, options)
     db.get(Bytes[1, 2, 0, 3]).should eq nil
     batch = RocksDB::WriteBatch.new
     batch.put(Bytes[1, 2, 0, 3], Bytes[0, 1, 0])
@@ -44,8 +42,7 @@ describe RocksDB do
     path = "tmp_#{Random::Secure.hex}"
     options = RocksDB::Options.new
     options.create_if_missing = true
-    txn_options = RocksDB::TransactionDbOptions.new
-    db = RocksDB::TransactionDatabase.open(path, options, txn_options)
+    db = RocksDB::TransactionDatabase.open(path, options)
 
     t1 = db.begin_transaction
     t1.get(Bytes[1, 2, 0, 3]).should eq nil

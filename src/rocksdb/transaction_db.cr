@@ -11,7 +11,7 @@ lib LibRocksDB
   fun transactiondb_put = rocksdb_transactiondb_put(transactiondb : TransactionDb*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
   fun transactiondb_delete = rocksdb_transactiondb_delete(transactiondb : TransactionDb*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
   fun transactiondb_write = rocksdb_transactiondb_write(transactiondb : TransactionDb*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
-  fun transactiondb_create_iterator = rocksdb_transactiondb_create_iterator(db : Db*, read_options : ReadOptions*) : Iterator*
+  fun transactiondb_create_iterator = rocksdb_transactiondb_create_iterator(transactiondb : TransactionDb*, read_options : ReadOptions*) : Iterator*
 
   struct TransactionDbOptions
     dummy : UInt8
@@ -42,7 +42,7 @@ end
 
 module RocksDB
   class TransactionDatabase < Database
-    def self.open(path : String, options : Options, txn_options : TransactionDbOptions) : TransactionDatabase
+    def self.open(path : String, options : Options, txn_options : TransactionDatabaseOptions = TransactionDatabaseOptions.new) : TransactionDatabase
       transaction_db = RocksDB.err_check do |err|
         LibRocksDB.transactiondb_open(options, txn_options, path, err)
       end
@@ -132,7 +132,7 @@ module RocksDB
     end
   end
 
-  class TransactionDbOptions
+  class TransactionDatabaseOptions
     def initialize
       @value = LibRocksDB.transactiondb_options_create
     end
