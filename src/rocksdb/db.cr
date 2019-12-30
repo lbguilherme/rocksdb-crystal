@@ -27,10 +27,11 @@ module RocksDB
     end
 
     def finalize
-      close unless @value.null?
+      close
     end
 
     def close
+      return if @value.null?
       LibRocksDB.close(@value)
       @value = Pointer(LibRocksDB::Db).null
     end

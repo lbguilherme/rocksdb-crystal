@@ -60,11 +60,12 @@ module RocksDB
     end
 
     def finalize
-      close unless @value.null?
+      close
     end
 
     def close
-      LibRocksDB.transactiondb_close(self)
+      return if @value.null?
+      LibRocksDB.transactiondb_close(@value)
       @value = Pointer(LibRocksDB::TransactionDb).null
     end
 

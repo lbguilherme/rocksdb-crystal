@@ -36,6 +36,7 @@ module RocksDB
     end
 
     def close
+      return if @value.null?
       LibRocksDB.optimistictransactiondb_close_base_db(@value)
       LibRocksDB.optimistictransactiondb_close(@optimistic_transaction_db)
       @value = Pointer(LibRocksDB::Db).null
