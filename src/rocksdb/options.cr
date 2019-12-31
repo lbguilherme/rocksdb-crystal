@@ -91,7 +91,7 @@ module RocksDB
       LibRocksDB.readoptions_set_iterate_lower_bound(self, key, key.size)
     end
 
-    def readoptions_set_snapshot=(snapshot : BaseSnapshot)
+    def snapshot=(snapshot : BaseSnapshot)
       LibRocksDB.readoptions_set_readoptions_set_snapshot(self, snapshot)
     end
   end
