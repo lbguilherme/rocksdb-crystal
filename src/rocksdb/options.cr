@@ -19,6 +19,7 @@ lib LibRocksDB
   fun readoptions_destroy = rocksdb_readoptions_destroy(read_options : ReadOptions*)
   fun readoptions_set_iterate_upper_bound = rocksdb_readoptions_set_iterate_upper_bound(read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT)
   fun readoptions_set_iterate_lower_bound = rocksdb_readoptions_set_iterate_lower_bound(read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT)
+  fun readoptions_set_snapshot = rocksdb_readoptions_set_snapshot(read_options : ReadOptions*, snapshot : Snapshot*)
 
   struct WriteOptions
     dummy : UInt8
@@ -88,6 +89,10 @@ module RocksDB
 
     def iterate_lower_bound=(key : Bytes)
       LibRocksDB.readoptions_set_iterate_lower_bound(self, key, key.size)
+    end
+
+    def readoptions_set_snapshot=(snapshot : BaseSnapshot)
+      LibRocksDB.readoptions_set_readoptions_set_snapshot(self, snapshot)
     end
   end
 

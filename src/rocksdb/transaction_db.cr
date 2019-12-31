@@ -12,6 +12,8 @@ lib LibRocksDB
   fun transactiondb_delete = rocksdb_transactiondb_delete(transactiondb : TransactionDb*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
   fun transactiondb_write = rocksdb_transactiondb_write(transactiondb : TransactionDb*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
   fun transactiondb_create_iterator = rocksdb_transactiondb_create_iterator(transactiondb : TransactionDb*, read_options : ReadOptions*) : Iterator*
+  fun transactiondb_create_snapshot = rocksdb_transactiondb_create_snapshot(transactiondb : TransactionDb*) : Snapshot*
+  fun transactiondb_release_snapshot = rocksdb_transactiondb_release_snapshot(transactiondb : TransactionDb*, snapshot : Snapshot*)
 
   struct TransactionDbOptions
     dummy : UInt8
@@ -118,6 +120,21 @@ module RocksDB
     def iterator(read_options : ReadOptions = @default_read_options)
       raise ClosedDatabaseError.new if @value.null?
       Iterator.new(LibRocksDB.transactiondb_create_iterator(self, read_options))
+    end
+
+    def snapshot
+      raise ClosedDatabaseError.new if @value.null?
+      Snapshot.new(LibRocksDB.transactiondb_create_snapshot(self))
+    end
+
+    class Snapshot < BaseSnapshot
+      def initialize(snapshot : LibRocksDB::Snapshot*, @db : TransactionDatabase)
+        super(snapshot)
+      end
+
+      def finalize
+        LibRocksDB.transactiondb_release_snapshot(@db, self) unless @db.to_unsafe.null?
+      end
     end
   end
 

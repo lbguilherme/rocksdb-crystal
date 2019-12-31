@@ -1,3 +1,5 @@
+require "./snapshot"
+
 lib LibRocksDB
   struct Db
     dummy : UInt8
@@ -10,6 +12,8 @@ lib LibRocksDB
   fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
   fun write = rocksdb_write(db : Db*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
   fun create_iterator = rocksdb_create_iterator(db : Db*, read_options : ReadOptions*) : Iterator*
+  fun create_snapshot = rocksdb_create_snapshot(db : Db*) : Snapshot*
+  fun release_snapshot = rocksdb_release_snapshot(db : Db*, snapshot : Snapshot*)
 end
 
 module RocksDB
@@ -75,6 +79,21 @@ module RocksDB
     def iterator(read_options : ReadOptions = @default_read_options)
       raise ClosedDatabaseError.new if @value.null?
       Iterator.new(LibRocksDB.create_iterator(self, read_options))
+    end
+
+    def snapshot
+      raise ClosedDatabaseError.new if @value.null?
+      Snapshot.new(LibRocksDB.create_snapshot(self))
+    end
+
+    class Snapshot < BaseSnapshot
+      def initialize(snapshot : LibRocksDB::Snapshot*, @db : Database)
+        super(snapshot)
+      end
+
+      def finalize
+        LibRocksDB.release_snapshot(@db, self) unless @db.to_unsafe.null?
+      end
     end
   end
 end
