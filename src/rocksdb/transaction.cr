@@ -13,6 +13,7 @@ lib LibRocksDB
   fun transaction_put = rocksdb_transaction_put(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
   fun transaction_delete = rocksdb_transaction_delete(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
   fun transaction_write = rocksdb_transaction_write(txn : Transaction*, batch : WriteBatch*, errptr : UInt8**)
+  fun transaction_create_iterator = rocksdb_transaction_create_iterator(txn : Transaction*, read_options : ReadOptions*) : Iterator*
 end
 
 module RocksDB
@@ -80,6 +81,10 @@ module RocksDB
       RocksDB.err_check do |err|
         LibRocksDB.transaction_write(self, batch, err)
       end
+    end
+
+    def iterator(read_options : ReadOptions = @default_read_options)
+      Iterator.new(LibRocksDB.transaction_create_iterator(self, read_options))
     end
   end
 end
