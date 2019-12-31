@@ -92,7 +92,7 @@ module RocksDB
     end
 
     def snapshot=(snapshot : BaseSnapshot)
-      LibRocksDB.readoptions_set_readoptions_set_snapshot(self, snapshot)
+      LibRocksDB.readoptions_set_snapshot(self, snapshot)
     end
   end
 
