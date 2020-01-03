@@ -34,8 +34,12 @@ module RocksDB
       close
     end
 
+    def closed?
+      @value.null?
+    end
+
     def close
-      return if @value.null?
+      return if closed?
       LibRocksDB.close(@value)
       @value = Pointer(LibRocksDB::Db).null
     end
@@ -47,7 +51,7 @@ module RocksDB
     end
 
     def get(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       len = uninitialized LibC::SizeT
       ptr = RocksDB.err_check do |err|
         LibRocksDB.get(self, read_options, key, key.size, pointerof(len), err)
@@ -56,33 +60,33 @@ module RocksDB
     end
 
     def put(key : Bytes, value : Bytes, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       RocksDB.err_check do |err|
         LibRocksDB.put(self, write_options, key, key.size, value, value.size, err)
       end
     end
 
     def delete(key : Bytes, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       RocksDB.err_check do |err|
         LibRocksDB.delete(self, write_options, key, key.size, err)
       end
     end
 
     def write(batch : WriteBatch, write_options : WriteOptions = @default_write_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       RocksDB.err_check do |err|
         LibRocksDB.write(self, write_options, batch, err)
       end
     end
 
     def iterator(read_options : ReadOptions = @default_read_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       Iterator.new(LibRocksDB.create_iterator(self, read_options))
     end
 
     def snapshot
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       Snapshot.new(LibRocksDB.create_snapshot(self), self)
     end
 

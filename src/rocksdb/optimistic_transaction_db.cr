@@ -36,7 +36,7 @@ module RocksDB
     end
 
     def close
-      return if @value.null?
+      return if closed?
       LibRocksDB.optimistictransactiondb_close_base_db(@value)
       LibRocksDB.optimistictransactiondb_close(@optimistic_transaction_db)
       @value = Pointer(LibRocksDB::Db).null
@@ -44,7 +44,7 @@ module RocksDB
     end
 
     def begin_transaction(write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       OptimisticTransaction.new(
         LibRocksDB.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, nil),
         @default_read_options,
@@ -55,7 +55,7 @@ module RocksDB
     end
 
     def begin_transaction(old : OptimisticTransaction, write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
-      raise ClosedDatabaseError.new if @value.null?
+      raise ClosedDatabaseError.new if closed?
       LibRocksDB.optimistictransaction_begin(@optimistic_transaction_db, write_options, optimistic_transaction_options, old)
     end
   end
@@ -70,6 +70,10 @@ module RocksDB
 
     def begin(write_options : WriteOptions = @default_write_options, optimistic_transaction_options : OptimisticTransactionOptions = @default_optimistic_transaction_options)
       @optimistic_transaction_db.begin_transaction(self, write_options, optimistic_transaction_options)
+    end
+
+    def finalize
+      LibRocksDB.transaction_destroy(self) unless @optimistic_transaction_db.closed?
     end
   end
 

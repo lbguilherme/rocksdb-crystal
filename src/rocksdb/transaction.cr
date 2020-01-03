@@ -29,9 +29,7 @@ module RocksDB
     def initialize(@value : LibRocksDB::Transaction*, @default_read_options : ReadOptions, @default_write_options : WriteOptions)
     end
 
-    def finalize
-      LibRocksDB.transaction_destroy(self)
-    end
+    abstract def finalize
 
     def commit
       RocksDB.err_check { |err| LibRocksDB.transaction_commit(self, err) }
