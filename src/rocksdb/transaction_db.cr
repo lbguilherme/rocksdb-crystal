@@ -128,7 +128,7 @@ module RocksDB
 
     def snapshot
       raise ClosedDatabaseError.new if closed?
-      Snapshot.new(LibRocksDB.transactiondb_create_snapshot(self),)
+      Snapshot.new(LibRocksDB.transactiondb_create_snapshot(self), self)
     end
 
     class Snapshot < BaseSnapshot
