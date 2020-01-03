@@ -123,7 +123,7 @@ module RocksDB
 
     def iterator(read_options : ReadOptions = @default_read_options)
       raise ClosedDatabaseError.new if closed?
-      Iterator.new(LibRocksDB.transactiondb_create_iterator(self, read_options))
+      Iterator.new(LibRocksDB.transactiondb_create_iterator(self, read_options), self)
     end
 
     def snapshot

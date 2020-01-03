@@ -18,7 +18,7 @@ end
 
 module RocksDB
   class Iterator
-    def initialize(@value : LibRocksDB::Iterator*)
+    def initialize(@value : LibRocksDB::Iterator*, @database : Database | TransactionDatabase)
     end
 
     def to_unsafe
@@ -26,7 +26,7 @@ module RocksDB
     end
 
     def finalize
-      LibRocksDB.iter_destroy(self)
+      LibRocksDB.iter_destroy(self) unless @database.closed?
     end
 
     def valid?
