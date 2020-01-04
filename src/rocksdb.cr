@@ -1,4 +1,4 @@
-@[Link("rocksdb")]
+@[Link(ldflags: "-lrocksdb -lstdc++")]
 lib LibRocksDB
   fun free = rocksdb_free(ptr : Void*)
 end
