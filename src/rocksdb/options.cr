@@ -79,7 +79,7 @@ module RocksDB
     end
 
     def disable_wal=(value : Bool)
-      LibRocksDB.writeoptions_disable_WAL(self, value ? 1 : 0)
+      LibRocksDB.writeoptions_disable_wal(self, value ? 1 : 0)
     end
 
     def ignore_missing_column_families=(value : Bool)
