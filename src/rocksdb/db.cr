@@ -1,20 +1,6 @@
+require "../librocksdb"
 require "./snapshot"
-
-lib LibRocksDB
-  struct Db
-    dummy : UInt8
-  end
-
-  fun open = rocksdb_open(options : Options*, name : UInt8*, errptr : UInt8**) : Db*
-  fun close = rocksdb_close(db : Db*)
-  fun get = rocksdb_get(db : Db*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
-  fun put = rocksdb_put(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
-  fun delete = rocksdb_delete(db : Db*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
-  fun write = rocksdb_write(db : Db*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
-  fun create_iterator = rocksdb_create_iterator(db : Db*, read_options : ReadOptions*) : Iterator*
-  fun create_snapshot = rocksdb_create_snapshot(db : Db*) : Snapshot*
-  fun release_snapshot = rocksdb_release_snapshot(db : Db*, snapshot : Snapshot*)
-end
+require "./base"
 
 module RocksDB
   class ClosedDatabaseError < Error

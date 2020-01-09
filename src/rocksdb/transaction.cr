@@ -1,20 +1,5 @@
-lib LibRocksDB
-  struct Transaction
-    dummy : UInt8
-  end
-
-  fun transaction_commit = rocksdb_transaction_commit(txn : Transaction*, errptr : UInt8**)
-  fun transaction_rollback = rocksdb_transaction_rollback(txn : Transaction*, errptr : UInt8**)
-  fun transaction_set_savepoint = rocksdb_transaction_set_savepoint(txn : Transaction*)
-  fun transaction_rollback_to_savepoint = rocksdb_transaction_rollback_to_savepoint(txn : Transaction*, errptr : UInt8**)
-  fun transaction_destroy = rocksdb_transaction_destroy(txn : Transaction*)
-  fun transaction_get = rocksdb_transaction_get(txn : Transaction*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
-  fun transaction_get_for_update = rocksdb_transaction_get_for_update(txn : Transaction*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, exclusive : UInt8, errptr : UInt8**) : UInt8*
-  fun transaction_put = rocksdb_transaction_put(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
-  fun transaction_delete = rocksdb_transaction_delete(txn : Transaction*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
-  fun transaction_write = rocksdb_transaction_write(txn : Transaction*, batch : WriteBatch*, errptr : UInt8**)
-  fun transaction_create_iterator = rocksdb_transaction_create_iterator(txn : Transaction*, read_options : ReadOptions*) : Iterator*
-end
+require "../librocksdb"
+require "./options"
 
 module RocksDB
   abstract class BaseTransaction

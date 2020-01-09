@@ -1,46 +1,6 @@
 require "./transaction"
-
-lib LibRocksDB
-  struct TransactionDb
-    dummy : UInt8
-  end
-
-  fun transactiondb_open = rocksdb_transactiondb_open(options : Options*, transactiondb_options : TransactionDbOptions*, name : UInt8*, errptr : UInt8**) : TransactionDb*
-  fun transactiondb_close = rocksdb_transactiondb_close(transactiondb : TransactionDb*)
-  fun transactiondb_get = rocksdb_transactiondb_get(transactiondb : TransactionDb*, read_options : ReadOptions*, key : UInt8*, keylen : LibC::SizeT, vallen : LibC::SizeT*, errptr : UInt8**) : UInt8*
-  fun transactiondb_put = rocksdb_transactiondb_put(transactiondb : TransactionDb*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, val : UInt8*, vallen : LibC::SizeT, errptr : UInt8**)
-  fun transactiondb_delete = rocksdb_transactiondb_delete(transactiondb : TransactionDb*, write_options : WriteOptions*, key : UInt8*, keylen : LibC::SizeT, errptr : UInt8**)
-  fun transactiondb_write = rocksdb_transactiondb_write(transactiondb : TransactionDb*, write_options : WriteOptions*, batch : WriteBatch*, errptr : UInt8**)
-  fun transactiondb_create_iterator = rocksdb_transactiondb_create_iterator(transactiondb : TransactionDb*, read_options : ReadOptions*) : Iterator*
-  fun transactiondb_create_snapshot = rocksdb_transactiondb_create_snapshot(transactiondb : TransactionDb*) : Snapshot*
-  fun transactiondb_release_snapshot = rocksdb_transactiondb_release_snapshot(transactiondb : TransactionDb*, snapshot : Snapshot*)
-
-  struct TransactionDbOptions
-    dummy : UInt8
-  end
-
-  fun transactiondb_options_create = rocksdb_transactiondb_options_create : TransactionDbOptions*
-  fun transactiondb_options_destroy = rocksdb_transactiondb_options_destroy(transactiondb_options : TransactionDbOptions*)
-  fun transactiondb_options_set_max_num_locks = rocksdb_transactiondb_options_set_max_num_locks(transactiondb_options : TransactionDbOptions*, value : Int64)
-  fun transactiondb_options_set_num_stripes = rocksdb_transactiondb_options_set_num_stripes(transactiondb_options : TransactionDbOptions*, value : LibC::SizeT)
-  fun transactiondb_options_set_transaction_lock_timeout = rocksdb_transactiondb_options_set_transaction_lock_timeout(transactiondb_options : TransactionDbOptions*, value : Int64)
-  fun transactiondb_options_set_default_lock_timeout = rocksdb_transactiondb_options_set_default_lock_timeout(transactiondb_options : TransactionDbOptions*, value : Int64)
-
-  struct TransactionOptions
-    dummy : UInt8
-  end
-
-  fun transaction_options_create = rocksdb_transaction_options_create : TransactionOptions*
-  fun transaction_options_destroy = rocksdb_transaction_options_destroy(transaction_options : TransactionOptions*)
-  fun transaction_options_set_set_snapshot = rocksdb_transaction_options_set_set_snapshot(transaction_options : TransactionOptions*, value : UInt8)
-  fun transaction_options_set_deadlock_detect = rocksdb_transaction_options_set_deadlock_detect(transaction_options : TransactionOptions*, value : UInt8)
-  fun transaction_options_set_lock_timeout = rocksdb_transaction_options_set_lock_timeout(transaction_options : TransactionOptions*, lock_timeout : Int64)
-  fun transaction_options_set_expiration = rocksdb_transaction_options_set_expiration(transaction_options : TransactionOptions*, expiration : Int64)
-  fun transaction_options_set_deadlock_detect_depth = rocksdb_transaction_options_set_deadlock_detect_depth(transaction_options : TransactionOptions*, depth : Int64)
-  fun transaction_options_set_max_write_batch_size = rocksdb_transaction_options_set_max_write_batch_size(transaction_options : TransactionOptions*, size : LibC::SizeT)
-
-  fun transaction_begin = rocksdb_transaction_begin(transactiondb : TransactionDb*, write_options : WriteOptions*, txn_options : TransactionOptions*, old_txn : Transaction*) : Transaction*
-end
+require "./snapshot"
+require "../librocksdb"
 
 module RocksDB
   class TransactionDatabase

@@ -1,8 +1,4 @@
-lib LibRocksDB
-  struct Snapshot
-    dummy : UInt8
-  end
-end
+require "../librocksdb"
 
 module RocksDB
   abstract class BaseSnapshot
