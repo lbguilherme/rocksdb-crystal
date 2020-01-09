@@ -23,7 +23,7 @@ describe RocksDB do
       db = {{ dbClass }}.open(path, options)
       db.close
 
-      db = {{ dbClass }}.open_column_families(path, options, {"default" => options})
+      db = {{ dbClass }}.open(path, options, {"default" => options})
       handle = db.family_handle("default")
 
       db.put(Bytes[1], Bytes[10])

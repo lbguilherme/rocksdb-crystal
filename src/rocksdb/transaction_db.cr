@@ -12,7 +12,7 @@ module RocksDB
       new(transaction_db)
     end
 
-    def self.open_column_families(path : String, options : Options, families : Hash(String, Options), txn_options : TransactionDatabaseOptions = TransactionDatabaseOptions.new)
+    def self.open(path : String, options : Options, families : Hash(String, Options), txn_options : TransactionDatabaseOptions = TransactionDatabaseOptions.new)
       names = families.keys
       family_names = names.map(&.to_unsafe).to_unsafe
       family_options = names.map { |name| families[name].to_unsafe }.to_unsafe
