@@ -601,6 +601,7 @@ lib LibRocksDB
   fun readoptions_destroy = rocksdb_readoptions_destroy(x0 : ReadOptions*)
   fun readoptions_set_verify_checksums = rocksdb_readoptions_set_verify_checksums(x0 : ReadOptions*, x1 : UInt8)
   fun readoptions_set_fill_cache = rocksdb_readoptions_set_fill_cache(x0 : ReadOptions*, x1 : UInt8)
+  fun readoptions_set_snapshot = rocksdb_readoptions_set_snapshot(x0 : ReadOptions*, x1 : Snapshot*)
   fun readoptions_set_iterate_upper_bound = rocksdb_readoptions_set_iterate_upper_bound(x0 : ReadOptions*, key : LibC::Char*, keylen : LibC::SizeT)
   fun readoptions_set_iterate_lower_bound = rocksdb_readoptions_set_iterate_lower_bound(x0 : ReadOptions*, key : LibC::Char*, keylen : LibC::SizeT)
   fun readoptions_set_read_tier = rocksdb_readoptions_set_read_tier(x0 : ReadOptions*, x1 : LibC::Int)
