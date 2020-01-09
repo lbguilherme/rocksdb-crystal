@@ -8,3 +8,6 @@ description: |
   Bindings for RocksDB
 
 license: MIT
+
+scripts:
+  postinstall: c++ -fno-rtti -c src/librocksdb.cc -o src/librocksdb.o

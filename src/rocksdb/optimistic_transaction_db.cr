@@ -5,20 +5,37 @@ require "../librocksdb"
 
 module RocksDB
   class OptimisticTransactionDatabase < Database
-    def self.open(path : String, options : Options) : OptimisticTransactionDatabase
+    def self.open(path : String, options : Options)
       optimistic_transaction_db = RocksDB.err_check do |err|
         LibRocksDB.optimistictransactiondb_open(options, path, err)
       end
-      new(LibRocksDB.optimistictransactiondb_get_base_db(optimistic_transaction_db), optimistic_transaction_db)
+      db = LibRocksDB.optimistictransactiondb_get_base_db(optimistic_transaction_db)
+      new(db, optimistic_transaction_db)
     end
 
-    def initialize(value, @optimistic_transaction_db : LibRocksDB::OptimisticTransactionDb*)
-      super(value)
+    def self.open_column_families(path : String, options : Options, families : Hash(String, Options))
+      names = families.keys
+      family_names = names.map(&.to_unsafe).to_unsafe
+      family_options = names.map { |name| families[name].to_unsafe }.to_unsafe
+      handles = Pointer(LibRocksDB::ColumnFamilyHandle*).malloc(names.size)
+      optimistic_transaction_db = RocksDB.err_check do |err|
+        LibRocksDB.optimistictransactiondb_open_column_families(options, path, families.size, family_names, family_options, handles, err)
+      end
+      handle_table = names.map_with_index { |name, i| {name, ColumnFamilyHandle.new(handles[i])} }.to_h
+      db = LibRocksDB.optimistictransactiondb_get_base_db(optimistic_transaction_db)
+      new(db, optimistic_transaction_db, handle_table)
+    end
+
+    def initialize(value, @optimistic_transaction_db : LibRocksDB::OptimisticTransactionDb*, families = {} of String => ColumnFamilyHandle)
+      super(value, families)
       @default_optimistic_transaction_options = OptimisticTransactionOptions.new
     end
 
     def close
       return if closed?
+      @families.values.each do |cf|
+        LibRocksDB.column_family_handle_destroy(cf)
+      end
       LibRocksDB.optimistictransactiondb_close_base_db(@value)
       LibRocksDB.optimistictransactiondb_close(@optimistic_transaction_db)
       @value = Pointer(LibRocksDB::Db).null

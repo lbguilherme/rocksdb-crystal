@@ -40,6 +40,14 @@ module RocksDB
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
 
+    def get(column_family : ColumnFamilyHandle, key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
+      len = uninitialized LibC::SizeT
+      ptr = RocksDB.err_check do |err|
+        LibRocksDB.transaction_get_cf(self, read_options, column_family, key, key.size, pointerof(len), err)
+      end
+      ptr.null? ? nil : Bytes.new(ptr, len)
+    end
+
     def get_for_update(key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
       len = uninitialized LibC::SizeT
       ptr = RocksDB.err_check do |err|
@@ -48,15 +56,35 @@ module RocksDB
       ptr.null? ? nil : Bytes.new(ptr, len)
     end
 
-    def put(key : Bytes, value : Bytes)
+    def get_for_update(column_family : ColumnFamilyHandle, key : Bytes, read_options : ReadOptions = @default_read_options) : Bytes?
+      len = uninitialized LibC::SizeT
+      ptr = RocksDB.err_check do |err|
+        LibRocksDB.transaction_get_for_update_cf(self, read_options, column_family, key, key.size, pointerof(len), 1, err)
+      end
+      ptr.null? ? nil : Bytes.new(ptr, len)
+    end
+
+    def put(key : Bytes, value : Bytes) : Nil
       RocksDB.err_check do |err|
         LibRocksDB.transaction_put(self, key, key.size, value, value.size, err)
       end
     end
 
-    def delete(key : Bytes)
+    def put(column_family : ColumnFamilyHandle, key : Bytes, value : Bytes) : Nil
+      RocksDB.err_check do |err|
+        LibRocksDB.transaction_put_cf(self, column_family, key, key.size, value, value.size, err)
+      end
+    end
+
+    def delete(key : Bytes) : Nil
       RocksDB.err_check do |err|
         LibRocksDB.transaction_delete(self, key, key.size, err)
+      end
+    end
+
+    def delete(column_family : ColumnFamilyHandle, key : Bytes) : Nil
+      RocksDB.err_check do |err|
+        LibRocksDB.transaction_delete_cf(self, column_family, key, key.size, err)
       end
     end
 

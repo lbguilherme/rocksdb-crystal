@@ -1,6 +1,6 @@
 # Generated from c.h from RocksDB 6.5.2
 
-@[Link(ldflags: "-lrocksdb -lstdc++")]
+@[Link(ldflags: "#{__DIR__}/librocksdb.o -lrocksdb -lstdc++")]
 lib LibRocksDB
   struct Db
     dummy : UInt8
@@ -699,6 +699,7 @@ lib LibRocksDB
   fun delete_file_in_range = rocksdb_delete_file_in_range(db : Db*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT, errptr : LibC::Char**)
   fun delete_file_in_range_cf = rocksdb_delete_file_in_range_cf(db : Db*, column_family : ColumnFamilyHandle*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT, errptr : LibC::Char**)
   fun transactiondb_create_column_family = rocksdb_transactiondb_create_column_family(txn_db : TransactionDb*, column_family_options : Options*, column_family_name : LibC::Char*, errptr : LibC::Char**) : ColumnFamilyHandle*
+  fun transactiondb_drop_column_family = rocksdb_transactiondb_drop_column_family(txn_db : TransactionDb*, handle : ColumnFamilyHandle*, errptr : LibC::Char**)
   fun transactiondb_open = rocksdb_transactiondb_open(options : Options*, txn_db_options : TransactionDbOptions*, name : LibC::Char*, errptr : LibC::Char**) : TransactionDb*
   fun transactiondb_open_column_families = rocksdb_transactiondb_open_column_families(options : Options*, txn_db_options : TransactionDbOptions*, name : LibC::Char*, num_column_families : LibC::Int, column_family_names : LibC::Char**, column_family_options : Options**, column_family_handles : ColumnFamilyHandle**, errptr : LibC::Char**) : TransactionDb*
   fun transactiondb_create_snapshot = rocksdb_transactiondb_create_snapshot(txn_db : TransactionDb*) : Snapshot*
