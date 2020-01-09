@@ -114,7 +114,7 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  struct Livefiles
+  struct LiveFiles
     dummy : UInt8
   end
 
@@ -126,7 +126,7 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  struct Ingestexternalfileoptions
+  struct IngestExternalFileOptions
     dummy : UInt8
   end
 
@@ -142,7 +142,7 @@ lib LibRocksDB
     dummy : UInt8
   end
 
-  struct Pinnableslice
+  struct PinnableSlice
     dummy : UInt8
   end
 
@@ -251,7 +251,7 @@ lib LibRocksDB
   fun compact_range_opt = rocksdb_compact_range_opt(db : Db*, opt : CompactOptions*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT)
   fun compact_range_cf_opt = rocksdb_compact_range_cf_opt(db : Db*, column_family : ColumnFamilyHandle*, opt : CompactOptions*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT)
   fun delete_file = rocksdb_delete_file(db : Db*, name : LibC::Char*)
-  fun livefiles = rocksdb_livefiles(db : Db*) : Livefiles*
+  fun livefiles = rocksdb_livefiles(db : Db*) : LiveFiles*
   fun flush = rocksdb_flush(db : Db*, options : FlushOptions*, errptr : LibC::Char**)
   fun flush_cf = rocksdb_flush_cf(db : Db*, options : FlushOptions*, column_family : ColumnFamilyHandle*, errptr : LibC::Char**)
   fun disable_file_deletions = rocksdb_disable_file_deletions(db : Db*, errptr : LibC::Char**)
@@ -659,15 +659,15 @@ lib LibRocksDB
   fun sstfilewriter_finish = rocksdb_sstfilewriter_finish(writer : SstFileWriter*, errptr : LibC::Char**)
   fun sstfilewriter_file_size = rocksdb_sstfilewriter_file_size(writer : SstFileWriter*, file_size : UInt64*)
   fun sstfilewriter_destroy = rocksdb_sstfilewriter_destroy(writer : SstFileWriter*)
-  fun ingestexternalfileoptions_create = rocksdb_ingestexternalfileoptions_create : Ingestexternalfileoptions*
-  fun ingestexternalfileoptions_set_move_files = rocksdb_ingestexternalfileoptions_set_move_files(opt : Ingestexternalfileoptions*, move_files : UInt8)
-  fun ingestexternalfileoptions_set_snapshot_consistency = rocksdb_ingestexternalfileoptions_set_snapshot_consistency(opt : Ingestexternalfileoptions*, snapshot_consistency : UInt8)
-  fun ingestexternalfileoptions_set_allow_global_seqno = rocksdb_ingestexternalfileoptions_set_allow_global_seqno(opt : Ingestexternalfileoptions*, allow_global_seqno : UInt8)
-  fun ingestexternalfileoptions_set_allow_blocking_flush = rocksdb_ingestexternalfileoptions_set_allow_blocking_flush(opt : Ingestexternalfileoptions*, allow_blocking_flush : UInt8)
-  fun ingestexternalfileoptions_set_ingest_behind = rocksdb_ingestexternalfileoptions_set_ingest_behind(opt : Ingestexternalfileoptions*, ingest_behind : UInt8)
-  fun ingestexternalfileoptions_destroy = rocksdb_ingestexternalfileoptions_destroy(opt : Ingestexternalfileoptions*)
-  fun ingest_external_file = rocksdb_ingest_external_file(db : Db*, file_list : LibC::Char**, list_len : LibC::SizeT, opt : Ingestexternalfileoptions*, errptr : LibC::Char**)
-  fun ingest_external_file_cf = rocksdb_ingest_external_file_cf(db : Db*, handle : ColumnFamilyHandle*, file_list : LibC::Char**, list_len : LibC::SizeT, opt : Ingestexternalfileoptions*, errptr : LibC::Char**)
+  fun ingestexternalfileoptions_create = rocksdb_ingestexternalfileoptions_create : IngestExternalFileOptions*
+  fun ingestexternalfileoptions_set_move_files = rocksdb_ingestexternalfileoptions_set_move_files(opt : IngestExternalFileOptions*, move_files : UInt8)
+  fun ingestexternalfileoptions_set_snapshot_consistency = rocksdb_ingestexternalfileoptions_set_snapshot_consistency(opt : IngestExternalFileOptions*, snapshot_consistency : UInt8)
+  fun ingestexternalfileoptions_set_allow_global_seqno = rocksdb_ingestexternalfileoptions_set_allow_global_seqno(opt : IngestExternalFileOptions*, allow_global_seqno : UInt8)
+  fun ingestexternalfileoptions_set_allow_blocking_flush = rocksdb_ingestexternalfileoptions_set_allow_blocking_flush(opt : IngestExternalFileOptions*, allow_blocking_flush : UInt8)
+  fun ingestexternalfileoptions_set_ingest_behind = rocksdb_ingestexternalfileoptions_set_ingest_behind(opt : IngestExternalFileOptions*, ingest_behind : UInt8)
+  fun ingestexternalfileoptions_destroy = rocksdb_ingestexternalfileoptions_destroy(opt : IngestExternalFileOptions*)
+  fun ingest_external_file = rocksdb_ingest_external_file(db : Db*, file_list : LibC::Char**, list_len : LibC::SizeT, opt : IngestExternalFileOptions*, errptr : LibC::Char**)
+  fun ingest_external_file_cf = rocksdb_ingest_external_file_cf(db : Db*, handle : ColumnFamilyHandle*, file_list : LibC::Char**, list_len : LibC::SizeT, opt : IngestExternalFileOptions*, errptr : LibC::Char**)
   fun try_catch_up_with_primary = rocksdb_try_catch_up_with_primary(db : Db*, errptr : LibC::Char**)
   fun slicetransform_create = rocksdb_slicetransform_create(state : Void*, destructor : (Void* -> Void), transform : (Void*, LibC::Char*, LibC::SizeT, LibC::SizeT* -> LibC::Char*), in_domain : (Void*, LibC::Char*, LibC::SizeT -> UInt8), in_range : (Void*, LibC::Char*, LibC::SizeT -> UInt8), name : (Void* -> LibC::Char*)) : SliceTransform*
   fun slicetransform_create_fixed_prefix = rocksdb_slicetransform_create_fixed_prefix(x0 : LibC::SizeT) : SliceTransform*
@@ -686,15 +686,15 @@ lib LibRocksDB
   fun fifo_compaction_options_create = rocksdb_fifo_compaction_options_create : FifoCompactionOptions*
   fun fifo_compaction_options_set_max_table_files_size = rocksdb_fifo_compaction_options_set_max_table_files_size(fifo_opts : FifoCompactionOptions*, size : UInt64)
   fun fifo_compaction_options_destroy = rocksdb_fifo_compaction_options_destroy(fifo_opts : FifoCompactionOptions*)
-  fun livefiles_count = rocksdb_livefiles_count(x0 : Livefiles*) : LibC::Int
-  fun livefiles_name = rocksdb_livefiles_name(x0 : Livefiles*, index : LibC::Int) : LibC::Char*
-  fun livefiles_level = rocksdb_livefiles_level(x0 : Livefiles*, index : LibC::Int) : LibC::Int
-  fun livefiles_size = rocksdb_livefiles_size(x0 : Livefiles*, index : LibC::Int) : LibC::SizeT
-  fun livefiles_smallestkey = rocksdb_livefiles_smallestkey(x0 : Livefiles*, index : LibC::Int, size : LibC::SizeT*) : LibC::Char*
-  fun livefiles_largestkey = rocksdb_livefiles_largestkey(x0 : Livefiles*, index : LibC::Int, size : LibC::SizeT*) : LibC::Char*
-  fun livefiles_entries = rocksdb_livefiles_entries(x0 : Livefiles*, index : LibC::Int) : UInt64*
-  fun livefiles_deletions = rocksdb_livefiles_deletions(x0 : Livefiles*, index : LibC::Int) : UInt64*
-  fun livefiles_destroy = rocksdb_livefiles_destroy(x0 : Livefiles*)
+  fun livefiles_count = rocksdb_livefiles_count(x0 : LiveFiles*) : LibC::Int
+  fun livefiles_name = rocksdb_livefiles_name(x0 : LiveFiles*, index : LibC::Int) : LibC::Char*
+  fun livefiles_level = rocksdb_livefiles_level(x0 : LiveFiles*, index : LibC::Int) : LibC::Int
+  fun livefiles_size = rocksdb_livefiles_size(x0 : LiveFiles*, index : LibC::Int) : LibC::SizeT
+  fun livefiles_smallestkey = rocksdb_livefiles_smallestkey(x0 : LiveFiles*, index : LibC::Int, size : LibC::SizeT*) : LibC::Char*
+  fun livefiles_largestkey = rocksdb_livefiles_largestkey(x0 : LiveFiles*, index : LibC::Int, size : LibC::SizeT*) : LibC::Char*
+  fun livefiles_entries = rocksdb_livefiles_entries(x0 : LiveFiles*, index : LibC::Int) : UInt64*
+  fun livefiles_deletions = rocksdb_livefiles_deletions(x0 : LiveFiles*, index : LibC::Int) : UInt64*
+  fun livefiles_destroy = rocksdb_livefiles_destroy(x0 : LiveFiles*)
   fun get_options_from_string = rocksdb_get_options_from_string(base_options : Options*, opts_str : LibC::Char*, new_options : Options*, errptr : LibC::Char**)
   fun delete_file_in_range = rocksdb_delete_file_in_range(db : Db*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT, errptr : LibC::Char**)
   fun delete_file_in_range_cf = rocksdb_delete_file_in_range_cf(db : Db*, column_family : ColumnFamilyHandle*, start_key : LibC::Char*, start_key_len : LibC::SizeT, limit_key : LibC::Char*, limit_key_len : LibC::SizeT, errptr : LibC::Char**)
@@ -759,10 +759,10 @@ lib LibRocksDB
   fun optimistictransaction_options_destroy = rocksdb_optimistictransaction_options_destroy(opt : OptimisticTransactionOptions*)
   fun optimistictransaction_options_set_set_snapshot = rocksdb_optimistictransaction_options_set_set_snapshot(opt : OptimisticTransactionOptions*, v : UInt8)
   fun free = rocksdb_free(ptr : Void*)
-  fun get_pinned = rocksdb_get_pinned(db : Db*, options : ReadOptions*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**) : Pinnableslice*
-  fun get_pinned_cf = rocksdb_get_pinned_cf(db : Db*, options : ReadOptions*, column_family : ColumnFamilyHandle*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**) : Pinnableslice*
-  fun pinnableslice_destroy = rocksdb_pinnableslice_destroy(v : Pinnableslice*)
-  fun pinnableslice_value = rocksdb_pinnableslice_value(t : Pinnableslice*, vlen : LibC::SizeT*) : LibC::Char*
+  fun get_pinned = rocksdb_get_pinned(db : Db*, options : ReadOptions*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**) : PinnableSlice*
+  fun get_pinned_cf = rocksdb_get_pinned_cf(db : Db*, options : ReadOptions*, column_family : ColumnFamilyHandle*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**) : PinnableSlice*
+  fun pinnableslice_destroy = rocksdb_pinnableslice_destroy(v : PinnableSlice*)
+  fun pinnableslice_value = rocksdb_pinnableslice_value(t : PinnableSlice*, vlen : LibC::SizeT*) : LibC::Char*
   fun memory_consumers_create = rocksdb_memory_consumers_create : MemoryConsumers*
   fun memory_consumers_add_db = rocksdb_memory_consumers_add_db(consumers : MemoryConsumers*, db : Db*)
   fun memory_consumers_add_cache = rocksdb_memory_consumers_add_cache(consumers : MemoryConsumers*, cache : Cache*)
