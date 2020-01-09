@@ -97,5 +97,9 @@ module RocksDB
     def iterator(read_options : ReadOptions = @default_read_options)
       Iterator.new(LibRocksDB.transaction_create_iterator(self, read_options))
     end
+
+    def iterator(column_family : ColumnFamilyHandle, read_options : ReadOptions = @default_read_options)
+      Iterator.new(LibRocksDB.transaction_create_iterator_cf(self, read_options, column_family))
+    end
   end
 end

@@ -147,6 +147,11 @@ module RocksDB
       Iterator.new(LibRocksDB.transactiondb_create_iterator(self, read_options), self)
     end
 
+    def iterator(column_family : ColumnFamilyHandle, read_options : ReadOptions = @default_read_options)
+      raise ClosedDatabaseError.new if closed?
+      Iterator.new(LibRocksDB.transactiondb_create_iterator_cf(self, read_options, column_family), self)
+    end
+
     def snapshot
       raise ClosedDatabaseError.new if closed?
       Snapshot.new(LibRocksDB.transactiondb_create_snapshot(self), self)
