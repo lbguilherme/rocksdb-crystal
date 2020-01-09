@@ -10,7 +10,6 @@ module RocksDB
     result = yield pointerof(err)
     unless err.null?
       str = String.new(err)
-      puts str
       RocksDB.free(err)
       raise RocksDB::Error.new(str)
     end
