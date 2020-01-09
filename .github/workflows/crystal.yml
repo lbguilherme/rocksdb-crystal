@@ -24,6 +24,9 @@ jobs:
     - name: Install dependencies from shards
       run: shards install
 
+    - name: Build librocksdb.o
+      run: c++ -fno-rtti -c src/librocksdb.cc -o src/librocksdb.o
+
     - name: Run tests
       run: crystal spec
 
