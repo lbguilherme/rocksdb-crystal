@@ -48,16 +48,56 @@ module RocksDB
       LibRocksDB.readoptions_destroy(self)
     end
 
-    def iterate_upper_bound=(key : Bytes)
-      LibRocksDB.readoptions_set_iterate_upper_bound(self, key, key.size)
+    def snapshot=(snapshot : BaseSnapshot)
+      LibRocksDB.readoptions_set_snapshot(self, snapshot)
     end
 
     def iterate_lower_bound=(key : Bytes)
       LibRocksDB.readoptions_set_iterate_lower_bound(self, key, key.size)
     end
 
-    def snapshot=(snapshot : BaseSnapshot)
-      LibRocksDB.readoptions_set_snapshot(self, snapshot)
+    def iterate_upper_bound=(key : Bytes)
+      LibRocksDB.readoptions_set_iterate_upper_bound(self, key, key.size)
+    end
+
+    def readahead_size=(size : Int)
+      LibRocksDB.readoptions_set_readahead_size(self, size)
+    end
+
+    def max_skippable_internal_keys=(value : Int)
+      LibRocksDB.readoptions_set_max_skippable_internal_keys(self, value)
+    end
+
+    def verify_checksums=(value : Bool)
+      LibRocksDB.readoptions_set_verify_checksums(self, value ? 1 : 0)
+    end
+
+    def fill_cache=(value : Bool)
+      LibRocksDB.readoptions_set_fill_cache(self, value ? 1 : 0)
+    end
+
+    def tailing=(value : Bool)
+      LibRocksDB.readoptions_set_tailing(self, value ? 1 : 0)
+    end
+
+    def total_order_seek=(value : Bool)
+      LibRocksDB.readoptions_set_total_order_seek(self, value ? 1 : 0)
+    end
+
+    def prefix_same_as_start=(value : Bool)
+      LibRocksDB.readoptions_set_prefix_same_as_start(self, value ? 1 : 0)
+    end
+
+    def pin_data=(value : Bool)
+      LibRocksDB.readoptions_set_pin_data(self, value ? 1 : 0)
+    end
+
+    def background_purge_on_iterator_cleanup=(value : Bool)
+      LibRocksDB.readoptions_set_background_purge_on_iterator_cleanup(self, value ? 1 : 0)
+    end
+
+    def ignore_range_deletions=(value : Bool)
+      LibRocksDB.readoptions_set_ignore_range_deletions(self, value ? 1 : 0)
     end
   end
 
