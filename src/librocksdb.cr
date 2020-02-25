@@ -420,6 +420,7 @@ lib LibRocksDB
   fun options_set_max_write_buffer_size_to_maintain = rocksdb_options_set_max_write_buffer_size_to_maintain(x0 : Options*, x1 : Int64)
   fun options_set_enable_pipelined_write = rocksdb_options_set_enable_pipelined_write(x0 : Options*, x1 : UInt8)
   fun options_set_unordered_write = rocksdb_options_set_unordered_write(x0 : Options*, x1 : UInt8)
+  fun options_set_avoid_unnecessary_blocking_io = rocksdb_options_set_avoid_unnecessary_blocking_io(x0 : Options*, x1 : UInt8)
   fun options_set_max_subcompactions = rocksdb_options_set_max_subcompactions(x0 : Options*, x1 : UInt32)
   fun options_set_max_background_jobs = rocksdb_options_set_max_background_jobs(x0 : Options*, x1 : LibC::Int)
   fun options_set_max_background_compactions = rocksdb_options_set_max_background_compactions(x0 : Options*, x1 : LibC::Int)
