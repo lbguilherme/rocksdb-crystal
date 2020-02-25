@@ -27,7 +27,7 @@ module RocksDB
     end
 
     def put(column_family : ColumnFamilyHandle, key : Bytes, value : Bytes) : Nil
-      LibRocksDB.writebatch_put_cf(self, key, column_family, key.size, value, value.size)
+      LibRocksDB.writebatch_put_cf(self, column_family, key, key.size, value, value.size)
     end
 
     def delete(key : Bytes) : Nil
