@@ -595,4 +595,38 @@ module RocksDB
       LibRocksDB.envoptions_destroy(self)
     end
   end
+
+  class IngestExternalFileOptions
+    def initialize
+      @value = LibRocksDB.ingestexternalfileoptions_create
+    end
+
+    def to_unsafe
+      @value
+    end
+
+    def finalize
+      LibRocksDB.ingestexternalfileoptions_destroy(self)
+    end
+
+    def move_files=(move_files : Bool)
+      LibRocksDB.ingestexternalfileoptions_set_move_files(self, move_files ? 1 : 0)
+    end
+
+    def snapshot_consistency=(snapshot_consistency : Bool)
+      LibRocksDB.ingestexternalfileoptions_set_snapshot_consistency(self, snapshot_consistency ? 1 : 0)
+    end
+
+    def allow_global_seqno=(allow_global_seqno : Bool)
+      LibRocksDB.ingestexternalfileoptions_set_allow_global_seqno(self, allow_global_seqno ? 1 : 0)
+    end
+
+    def allow_blocking_flush=(allow_blocking_flush : Bool)
+      LibRocksDB.ingestexternalfileoptions_set_allow_blocking_flush(self, allow_blocking_flush ? 1 : 0)
+    end
+
+    def ingest_behind=(ingest_behind : Bool)
+      LibRocksDB.ingestexternalfileoptions_set_ingest_behind(self, ingest_behind ? 1 : 0)
+    end
+  end
 end
