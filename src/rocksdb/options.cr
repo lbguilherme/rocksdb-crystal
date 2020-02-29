@@ -26,13 +26,13 @@ module RocksDB
       LibRocksDB.options_set_enable_pipelined_write(self, value ? 1 : 0)
     end
 
-    def unordered_write=(value : Bool)
-      LibRocksDB.options_set_unordered_write(self, value ? 1 : 0)
-    end
+    # def unordered_write=(value : Bool)
+    #   LibRocksDB.options_set_unordered_write(self, value ? 1 : 0)
+    # end
 
-    def avoid_unnecessary_blocking_io=(value : Bool)
-      LibRocksDB.options_set_avoid_unnecessary_blocking_io(self, value ? 1 : 0)
-    end
+    # def avoid_unnecessary_blocking_io=(value : Bool)
+    #   LibRocksDB.options_set_avoid_unnecessary_blocking_io(self, value ? 1 : 0)
+    # end
 
     def increase_parallelism(total_threads : Int = 16)
       LibRocksDB.options_increase_parallelism(self, total_threads)

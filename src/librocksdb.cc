@@ -3302,17 +3302,17 @@ extern "C"
     opt->rep.enable_pipelined_write = v;
   }
 
-  void rocksdb_options_set_unordered_write(rocksdb_options_t *opt,
-                                           unsigned char v)
-  {
-    opt->rep.unordered_write = v;
-  }
+  // void rocksdb_options_set_unordered_write(rocksdb_options_t *opt,
+  //                                          unsigned char v)
+  // {
+  //   opt->rep.unordered_write = v;
+  // }
 
-  void rocksdb_options_set_avoid_unnecessary_blocking_io(rocksdb_options_t *opt,
-                                                         unsigned char v)
-  {
-    opt->rep.avoid_unnecessary_blocking_io = v;
-  }
+  // void rocksdb_options_set_avoid_unnecessary_blocking_io(rocksdb_options_t *opt,
+  //                                                        unsigned char v)
+  // {
+  //   opt->rep.avoid_unnecessary_blocking_io = v;
+  // }
 
   void rocksdb_options_set_max_subcompactions(rocksdb_options_t *opt,
                                               uint32_t n)
