@@ -37,4 +37,18 @@ describe RocksDB do
     db.close
     FileUtils.rm_rf path
   end
+
+  it "accepts db options" do
+    path = "tmp_#{Random::Secure.hex}"
+    options = RocksDB::Options.new
+    options.create_if_missing = true
+    options.paranoid_checks = false
+    options.enable_pipelined_write = true
+    options.allow_ingest_behind = true
+    options.increase_parallelism(16)
+    options.max_background_jobs = 4
+    db = RocksDB::Database.open(path, options)
+    db.close
+    FileUtils.rm_rf path
+  end
 end

@@ -34,6 +34,10 @@ module RocksDB
     #   LibRocksDB.options_set_avoid_unnecessary_blocking_io(self, value ? 1 : 0)
     # end
 
+    def allow_ingest_behind=(value : Bool)
+      LibRocksDB.options_set_allow_ingest_behind(self, value ? 1 : 0)
+    end
+
     def increase_parallelism(total_threads : Int = 16)
       LibRocksDB.options_increase_parallelism(self, total_threads)
     end
