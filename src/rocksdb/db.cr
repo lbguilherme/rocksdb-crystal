@@ -138,6 +138,20 @@ module RocksDB
       end
     end
 
+    def delete_range(key_start : Bytes, key_end : Bytes, write_options : WriteOptions = @default_write_options) : Nil
+      raise ClosedDatabaseError.new if closed?
+      RocksDB.err_check do |err|
+        LibRocksDB.delete_range(self, write_options, key_start, key_start.size, key_end, key_end.size, err)
+      end
+    end
+
+    def delete_range(column_family : ColumnFamilyHandle, key_start : Bytes, key_end : Bytes, write_options : WriteOptions = @default_write_options) : Nil
+      raise ClosedDatabaseError.new if closed?
+      RocksDB.err_check do |err|
+        LibRocksDB.delete_range_cf(self, write_options, column_family, key_start, key_start.size, key_end, key_end.size, err)
+      end
+    end
+
     def write(batch : WriteBatch, write_options : WriteOptions = @default_write_options) : Nil
       raise ClosedDatabaseError.new if closed?
       RocksDB.err_check do |err|

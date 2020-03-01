@@ -227,6 +227,8 @@ lib LibRocksDB
   fun put_cf = rocksdb_put_cf(db : Db*, options : WriteOptions*, column_family : ColumnFamilyHandle*, key : LibC::Char*, keylen : LibC::SizeT, val : LibC::Char*, vallen : LibC::SizeT, errptr : LibC::Char**)
   fun delete = rocksdb_delete(db : Db*, options : WriteOptions*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**)
   fun delete_cf = rocksdb_delete_cf(db : Db*, options : WriteOptions*, column_family : ColumnFamilyHandle*, key : LibC::Char*, keylen : LibC::SizeT, errptr : LibC::Char**)
+  fun delete_range = rocksdb_delete_range(db : Db*, options : WriteOptions*, start_key : LibC::Char*, start_key_len : LibC::SizeT, end_key : LibC::Char*, end_key_len : LibC::SizeT, errptr : LibC::Char**)
+  fun delete_range_cf = rocksdb_delete_range_cf(db : Db*, options : WriteOptions*, column_family : ColumnFamilyHandle*, start_key : LibC::Char*, start_key_len : LibC::SizeT, end_key : LibC::Char*, end_key_len : LibC::SizeT, errptr : LibC::Char**)
   fun merge = rocksdb_merge(db : Db*, options : WriteOptions*, key : LibC::Char*, keylen : LibC::SizeT, val : LibC::Char*, vallen : LibC::SizeT, errptr : LibC::Char**)
   fun merge_cf = rocksdb_merge_cf(db : Db*, options : WriteOptions*, column_family : ColumnFamilyHandle*, key : LibC::Char*, keylen : LibC::SizeT, val : LibC::Char*, vallen : LibC::SizeT, errptr : LibC::Char**)
   fun write = rocksdb_write(db : Db*, options : WriteOptions*, batch : WriteBatch*, errptr : LibC::Char**)

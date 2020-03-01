@@ -37,5 +37,13 @@ module RocksDB
     def delete(column_family : ColumnFamilyHandle, key : Bytes) : Nil
       LibRocksDB.writebatch_delete_cf(self, column_family, key, key.size)
     end
+
+    def delete_range(key_start : Bytes, key_end : Bytes) : Nil
+      LibRocksDB.writebatch_delete_range(self, key_start, key_start.size, key_end, key_end.size)
+    end
+
+    def delete_range(column_family : ColumnFamilyHandle, key_start : Bytes, key_end : Bytes) : Nil
+      LibRocksDB.writebatch_delete_range_cf(self, column_family, key_start, key_start.size, key_end, key_end.size)
+    end
   end
 end
