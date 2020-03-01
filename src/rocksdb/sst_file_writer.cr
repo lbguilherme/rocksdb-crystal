@@ -3,11 +3,11 @@ require "../librocksdb"
 module RocksDB
   class SstFileWriter
     def initialize(env_options : EnvOptions, options : Options)
-      @value = RocksDB.sstfilewriter_create(env_options, options)
+      @value = LibRocksDB.sstfilewriter_create(env_options, options)
     end
 
     def initialize(env_options : EnvOptions, options : Options, compactor : Compactor)
-      @value = RocksDB.sstfilewriter_create_with_comparator(env_options, options, compactor)
+      @value = LibRocksDB.sstfilewriter_create_with_comparator(env_options, options, compactor)
     end
 
     def to_unsafe

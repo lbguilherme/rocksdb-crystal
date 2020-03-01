@@ -155,14 +155,14 @@ module RocksDB
       Iterator.new(LibRocksDB.create_iterator_cf(self, read_options, column_family), self)
     end
 
-    def ingest_external_file(paths : Array(String), options = IngestExternalFileOptions)
+    def ingest_external_file(paths : Array(String), options : IngestExternalFileOptions)
       unsafe_paths = paths.map(&.to_unsafe)
       RocksDB.err_check do |err|
         LibRocksDB.ingest_external_file(self, unsafe_paths, unsafe_paths.size, options, err)
       end
     end
 
-    def ingest_external_file(column_family : ColumnFamilyHandle, paths : Array(String), options = IngestExternalFileOptions)
+    def ingest_external_file(column_family : ColumnFamilyHandle, paths : Array(String), options : IngestExternalFileOptions)
       unsafe_paths = paths.map(&.to_unsafe)
       RocksDB.err_check do |err|
         LibRocksDB.ingest_external_file_cf(self, column_family, unsafe_paths, unsafe_paths.size, options, err)
