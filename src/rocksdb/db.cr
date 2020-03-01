@@ -197,5 +197,31 @@ module RocksDB
         LibRocksDB.release_snapshot(@db, self) unless @db.to_unsafe.null?
       end
     end
+
+    def property_value(name : String) : String?
+      value = LibRocksDB.property_value(self, name)
+      return nil if value.null?
+      str = String.new(value)
+      RocksDB.free(value)
+      str
+    end
+
+    def property_int(name : String) : UInt64?
+      return nil if LibRocksDB.property_int(self, name, out value) < 0
+      value
+    end
+
+    def property_value(column_family : ColumnFamilyHandle, name : String) : String?
+      value = LibRocksDB.property_value_cf(self, column_family, name)
+      return nil if value.null?
+      str = String.new(value)
+      RocksDB.free(value)
+      str
+    end
+
+    def property_int(column_family : ColumnFamilyHandle, name : String) : UInt64?
+      return nil if LibRocksDB.property_int_cf(self, column_family, name, out value) < 0
+      value
+    end
   end
 end

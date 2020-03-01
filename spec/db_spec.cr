@@ -8,11 +8,13 @@ describe RocksDB do
     options = RocksDB::Options.new
     options.create_if_missing = true
     db = RocksDB::Database.open(path, options)
+    db.property_int("rocksdb.estimate-num-keys").should eq 0
     db.get(Bytes[1, 2, 0, 3]).should eq nil
     db.put(Bytes[1, 2, 0, 3], Bytes[0, 1, 0])
     db.get(Bytes[1, 2, 0, 3]).should eq Bytes[0, 1, 0]
     db.delete(Bytes[1, 2, 0, 3])
     db.get(Bytes[1, 2, 0, 3]).should eq nil
+    db.property_int("rocksdb.estimate-num-keys").try(&.should be >= 0)
     db.close
     FileUtils.rm_rf path
   end
