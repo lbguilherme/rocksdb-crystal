@@ -9,5 +9,7 @@ description: |
 
 license: MIT
 
+crystal: ">= 0.35, < 2.0"
+
 scripts:
   postinstall: c++ -fno-rtti -c src/librocksdb.cc -o src/librocksdb.o
